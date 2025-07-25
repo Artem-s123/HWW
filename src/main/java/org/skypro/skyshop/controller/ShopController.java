@@ -46,10 +46,5 @@ public class ShopController {
         basketService.addProduct(id);
         return "Продукт успешно добавлен";
     }
-
-    @GetMapping("/basket")
-    public UserBasket getUserBasket() {
-        return basketService.getUserBasket();
-    }
 }
 
