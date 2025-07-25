@@ -6,6 +6,8 @@ import org.skypro.skyshop.model.search.Searchable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class StorageService {
@@ -45,4 +47,13 @@ public class StorageService {
         result.addAll(articleMap.values());
         return result;
     }
+
+    /**
+     * Возвращает Optional<Product> по его UUID.
+     * Нужно для проверки наличия товара перед добавлением в корзину.
+     */
+    public Optional<Product> getProductById(UUID id) {
+        return Optional.ofNullable(productMap.get(id));
+    }
 }
+
