@@ -52,4 +52,3 @@ public class ShopController {
         return basketService.getUserBasket();
     }
 }
-

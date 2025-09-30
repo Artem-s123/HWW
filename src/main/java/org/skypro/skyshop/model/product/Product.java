@@ -10,6 +10,12 @@ public abstract class Product implements Searchable {
     private final String name;
 
     public Product(UUID id, String name) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID продукта не может быть null");
+        }
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Название продукта не может быть пустым");
+        }
         this.id = id;
         this.name = name;
     }
@@ -34,4 +40,9 @@ public abstract class Product implements Searchable {
 
     public abstract int getPrice();
     public abstract boolean isSpecial();
+
+    @Override
+    public String toString() {
+        return name + " (ID: " + id + ")";
+    }
 }

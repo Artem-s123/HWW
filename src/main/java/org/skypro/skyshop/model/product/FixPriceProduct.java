@@ -7,6 +7,9 @@ public class FixPriceProduct extends Product {
 
     public FixPriceProduct(UUID id, String name, int price) {
         super(id, name);
+        if (price <= 0) {
+            throw new IllegalArgumentException("Цена должна быть больше 0");
+        }
         this.price = price;
     }
 
@@ -18,5 +21,9 @@ public class FixPriceProduct extends Product {
     @Override
     public boolean isSpecial() {
         return false;
+    }
+
+    public int getPriceValue() {
+        return price;
     }
 }
