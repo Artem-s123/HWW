@@ -1,13 +1,12 @@
 package org.skypro.skyshop.service;
 
+import org.skypro.skyshop.exception.NoSuchProductException;
 import org.skypro.skyshop.model.article.Article;
 import org.skypro.skyshop.model.product.*;
 import org.skypro.skyshop.model.search.Searchable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class StorageService {
@@ -48,12 +47,12 @@ public class StorageService {
         return result;
     }
 
-    /**
-     * Возвращает Optional<Product> по его UUID.
-     * Нужно для проверки наличия товара перед добавлением в корзину.
-     */
-    public Optional<Product> getProductById(UUID id) {
-        return Optional.ofNullable(productMap.get(id));
+    // Без Optional — сразу бросаем исключение
+    public Product getProductById(UUID id) {
+        Product product = productMap.get(id);
+        if (product == null) {
+            throw new NoSuchProductException("Продукт с ID " + id + " не найден");
+        }
+        return product;
     }
 }
-
