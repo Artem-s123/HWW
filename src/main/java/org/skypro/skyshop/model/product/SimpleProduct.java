@@ -7,6 +7,9 @@ public class SimpleProduct extends Product {
 
     public SimpleProduct(UUID id, String name, int price) {
         super(id, name);
+        if (price <= 0) {
+            throw new IllegalArgumentException("Цена должна быть больше 0");
+        }
         this.price = price;
     }
 
@@ -18,5 +21,10 @@ public class SimpleProduct extends Product {
     @Override
     public boolean isSpecial() {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return getName() + ": " + price + "₽";
     }
 }

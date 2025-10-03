@@ -1,11 +1,10 @@
-// src/main/java/org/skypro/skyshop/model/basket/BasketItem.java
 package org.skypro.skyshop.model.basket;
 
 import org.skypro.skyshop.model.product.Product;
 
 public class BasketItem {
     private final Product product;
-    private final int quantity;
+    private int quantity;
 
     public BasketItem(Product product, int quantity) {
         this.product = product;
@@ -18,5 +17,13 @@ public class BasketItem {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void incrementQuantity() {
+        this.quantity++;
+    }
+
+    public int getTotalPrice() {
+        return product.getPrice() * quantity;
     }
 }

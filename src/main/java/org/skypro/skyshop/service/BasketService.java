@@ -1,8 +1,7 @@
-// src/main/java/org/skypro/skyshop/service/BasketService.java
 package org.skypro.skyshop.service;
 
-import org.skypro.skyshop.model.basket.ProductBasket;
 import org.skypro.skyshop.model.basket.BasketItem;
+import org.skypro.skyshop.model.basket.ProductBasket;
 import org.skypro.skyshop.model.basket.UserBasket;
 import org.springframework.stereotype.Service;
 
@@ -21,31 +20,19 @@ public class BasketService {
         this.storageService = storageService;
     }
 
-    /**
-     * Добавляет товар в корзину по его UUID.
-     * @throws IllegalArgumentException, если товара с таким id нет в StorageService
-     */
+    // Добавляет товар в корзину по его UUID
     public void addProduct(UUID id) {
-        storageService.getProductById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Товар с id=" + id + " не найден"))
-        ;
+        // Проверим, что товар существует (если нет — выкинет NoSuchProductException)
+        storageService.getProductById(id);
         productBasket.addProduct(id);
     }
 
-    /**
-     * Формирует UserBasket из текущего состояния ProductBasket
-     */
+    // Формирует UserBasket из текущего состояния ProductBasket
     public UserBasket getUserBasket() {
-        // Берём мапу id→count
         var map = productBasket.getProducts();
-        // Преобразуем в список BasketItem
         List<BasketItem> items = map.entrySet().stream()
-                .map(e -> {
-                    var product = storageService.getProductById(e.getKey()).get();
-                    return new BasketItem(product, e.getValue());
-                })
+                .map(e -> new BasketItem(storageService.getProductById(e.getKey()), e.getValue()))
                 .collect(Collectors.toList());
-        // Возвращаем готовый UserBasket (внутри считает total)
         return new UserBasket(items);
     }
 }

@@ -1,4 +1,3 @@
-// src/main/java/org/skypro/skyshop/model/basket/UserBasket.java
 package org.skypro.skyshop.model.basket;
 
 import java.util.List;
@@ -9,9 +8,8 @@ public class UserBasket {
 
     public UserBasket(List<BasketItem> items) {
         this.items = items;
-        // Считаем total = Σ(price × quantity)
         this.total = items.stream()
-                .mapToInt(i -> i.getProduct().getPrice() * i.getQuantity())
+                .mapToInt(BasketItem::getTotalPrice)
                 .sum();
     }
 
