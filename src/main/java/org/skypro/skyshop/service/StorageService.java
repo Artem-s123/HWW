@@ -47,6 +47,7 @@ public class StorageService {
         return result;
     }
 
+    // Без Optional — сразу бросаем исключение
     public Product getProductById(UUID id) {
         Product product = productMap.get(id);
         if (product == null) {
@@ -55,4 +56,3 @@ public class StorageService {
         return product;
     }
 }
-

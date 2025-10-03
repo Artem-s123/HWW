@@ -1,14 +1,23 @@
 package org.skypro.skyshop.model.basket;
 
-import org.skypro.skyshop.model.product.Product;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserBasket {
-    private final List<Product> products = new ArrayList<>();
+    private final List<BasketItem> items;
+    private final int total;
 
-    public List<Product> getProducts() {
-        return products;
+    public UserBasket(List<BasketItem> items) {
+        this.items = items;
+        this.total = items.stream()
+                .mapToInt(BasketItem::getTotalPrice)
+                .sum();
+    }
+
+    public List<BasketItem> getItems() {
+        return items;
+    }
+
+    public int getTotal() {
+        return total;
     }
 }

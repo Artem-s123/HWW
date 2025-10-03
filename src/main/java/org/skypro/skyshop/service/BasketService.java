@@ -1,33 +1,38 @@
 package org.skypro.skyshop.service;
 
-import org.skypro.skyshop.exception.NoSuchProductException;
+import org.skypro.skyshop.model.basket.BasketItem;
+import org.skypro.skyshop.model.basket.ProductBasket;
 import org.skypro.skyshop.model.basket.UserBasket;
-import org.skypro.skyshop.model.product.Product;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class BasketService {
 
+    private final ProductBasket productBasket;
     private final StorageService storageService;
-    private final UserBasket userBasket;
 
-    public BasketService(StorageService storageService) {
+    public BasketService(ProductBasket productBasket, StorageService storageService) {
+        this.productBasket = productBasket;
         this.storageService = storageService;
-        this.userBasket = new UserBasket();
     }
 
-    // Добавление продукта в корзину
+    // Добавляет товар в корзину по его UUID
     public void addProduct(UUID id) {
-        Product product = storageService.getProductById(id); // если не найдёт — выбросит NoSuchProductException
-        userBasket.getProducts().add(product);
+        // Проверим, что товар существует (если нет — выкинет NoSuchProductException)
+        storageService.getProductById(id);
+        productBasket.addProduct(id);
     }
 
-    // Получение содержимого корзины
+    // Формирует UserBasket из текущего состояния ProductBasket
     public UserBasket getUserBasket() {
-        return userBasket;
+        var map = productBasket.getProducts();
+        List<BasketItem> items = map.entrySet().stream()
+                .map(e -> new BasketItem(storageService.getProductById(e.getKey()), e.getValue()))
+                .collect(Collectors.toList());
+        return new UserBasket(items);
     }
 }

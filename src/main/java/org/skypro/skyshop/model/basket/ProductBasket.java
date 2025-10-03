@@ -1,28 +1,21 @@
+
 package org.skypro.skyshop.model.basket;
 
-import org.skypro.skyshop.model.product.Product;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class ProductBasket {
-    private final List<Product> products = new ArrayList<>();
+    private final Map<UUID, Integer> items = new HashMap<>();
 
-    public void addProduct(Product product) {
-        products.add(product);
+    // Добавить единицу товара в корзину (увеличить счётчик по ключу id)
+    public void addProduct(UUID id) {
+        items.merge(id, 1, Integer::sum);
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public int getTotalPrice() {
-        return products.stream()
-                .mapToInt(Product::getPrice)
-                .sum();
-    }
-
-    public boolean isEmpty() {
-        return products.isEmpty();
+    // Получить неизменяемую Map (id → количество)
+    public Map<UUID, Integer> getProducts() {
+        return Collections.unmodifiableMap(items);
     }
 }
